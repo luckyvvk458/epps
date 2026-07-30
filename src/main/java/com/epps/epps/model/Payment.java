@@ -149,6 +149,9 @@ public class Payment {
             if (customerId == null || customerId.isBlank()) {
                 throw new IllegalStateException("Customer Id cannot be null or blank ");
             }
+            if (paymentMode == null) {
+                throw new IllegalStateException("Payment mode cannot be null");
+            }
             return new Payment(this);
         }
     }

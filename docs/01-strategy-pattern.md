@@ -17,3 +17,7 @@ Add `NET_BANKING` to `PaymentMode`, create a `NetBankingPaymentProcessor`, and a
 ## Why this comes first
 
 This is an in-memory, deliberately small step. Database transactions, authentication, caches, and distributed services become much easier to reason about after the business behavior is isolated and covered by tests.
+
+## Builder invariant
+
+The HTTP DTO validates `paymentMode`, but the `Payment.Builder` validates it too. DTO validation protects controller input; builder validation protects domain objects created by any other code path.
