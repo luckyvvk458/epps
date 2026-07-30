@@ -3,14 +3,20 @@ package com.epps.epps.service;
 import com.epps.epps.dto.request.PaymentRequest;
 import com.epps.epps.dto.response.PaymentResponse;
 import com.epps.epps.model.Payment;
+import com.epps.epps.processor.PaymentProcessorRegistry;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PaymentService {
-    public PaymentResponse paymentResponse(PaymentRequest paymentRequest) {
+    private final PaymentProcessorRegistry processorRegistry;
 
+    public PaymentService(PaymentProcessorRegistry processorRegistry) {
+        this.processorRegistry = processorRegistry;
+    }
+
+    public PaymentResponse paymentResponse(PaymentRequest paymentRequest) {
         Payment payment = buildPayment(paymentRequest);
-        return new PaymentResponse("PAY10001", "SUCCESS", "Payment processed successfully");
+        return processorRegistry.forMode(payment.getPaymentMode()).process(payment);
     }
 
     private static Payment buildPayment(PaymentRequest paymentRequest) {

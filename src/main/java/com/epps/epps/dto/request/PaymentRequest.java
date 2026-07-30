@@ -1,20 +1,26 @@
 package com.epps.epps.dto.request;
 
 import com.epps.epps.enums.PaymentMode;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 public class PaymentRequest {
-    private double amount;
-    private String currency;
-    private String customerId;
+    @NotNull @DecimalMin(value = "0.01") private BigDecimal amount;
+    @NotBlank private String currency;
+    @NotBlank private String customerId;
 
     private String merchantId;
     private String coupon;
     private String description;
     private String callbackUrl;
     private int retryCount;
-    private PaymentMode paymentMode;
+    @NotNull private PaymentMode paymentMode;
 
-    public PaymentRequest(double amount, String currency, String customerId, String merchantId, String coupon, String description, String callbackUrl, int retryCount, PaymentMode paymentMode) {
+    public PaymentRequest() { }
+
+    public PaymentRequest(BigDecimal amount, String currency, String customerId, String merchantId, String coupon, String description, String callbackUrl, int retryCount, PaymentMode paymentMode) {
         this.amount = amount;
         this.currency = currency;
         this.customerId = customerId;
@@ -26,11 +32,11 @@ public class PaymentRequest {
         this.paymentMode = paymentMode;
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

@@ -3,9 +3,10 @@ package com.epps.epps.model;
 import com.epps.epps.enums.PaymentMode;
 
 import java.util.Objects;
+import java.math.BigDecimal;
 
 public class Payment {
-    private final double amount;
+    private final BigDecimal amount;
     private final String currency;
     private final String customerId;
     private final String merchantid;
@@ -32,7 +33,7 @@ public class Payment {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Payment payment = (Payment) o;
-        return Double.compare(amount, payment.amount) == 0 && retryCount == payment.retryCount && Objects.equals(currency, payment.currency) && Objects.equals(customerId, payment.customerId) && Objects.equals(merchantid, payment.merchantid) && Objects.equals(description, payment.description) && Objects.equals(coupon, payment.coupon) && Objects.equals(callbackUrl, payment.callbackUrl) && Objects.equals(paymentMode, payment.paymentMode);
+        return retryCount == payment.retryCount && Objects.equals(amount, payment.amount) && Objects.equals(currency, payment.currency) && Objects.equals(customerId, payment.customerId) && Objects.equals(merchantid, payment.merchantid) && Objects.equals(description, payment.description) && Objects.equals(coupon, payment.coupon) && Objects.equals(callbackUrl, payment.callbackUrl) && Objects.equals(paymentMode, payment.paymentMode);
     }
 
     @Override
@@ -55,7 +56,7 @@ public class Payment {
                 '}';
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
@@ -92,7 +93,7 @@ public class Payment {
     }
 
     public static class Builder {
-        private double amount;
+        private BigDecimal amount;
         private String currency;
         private String customerId;
         private String merchantid;
@@ -102,7 +103,7 @@ public class Payment {
         private int retryCount;
         private PaymentMode paymentMode;
 
-        private Builder(double amount, String currency, String customerId) {
+        private Builder(BigDecimal amount, String currency, String customerId) {
             this.amount = amount;
             this.currency = currency;
             this.customerId = customerId;
@@ -139,7 +140,7 @@ public class Payment {
         }
 
         public Payment build() {
-            if (amount <= 0) {
+            if (amount == null || amount.signum() <= 0) {
                 throw new IllegalStateException("amount cannot be zero or less");
             }
             if (currency == null || currency.isBlank()) {
@@ -152,7 +153,7 @@ public class Payment {
         }
     }
 
-    public static Builder builder(double amount, String currency, String customerId) {
+    public static Builder builder(BigDecimal amount, String currency, String customerId) {
         return new Builder(amount, currency, customerId);
     }
 
